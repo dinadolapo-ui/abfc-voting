@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABFC Awards 2025 - Voting System</title>
+    <title>Afrobeat Football Club - Awards 2025 | Official Voting Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,455 +13,1041 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #1B5E20;
+            --primary-light: #2E7D32;
+            --primary-dark: #0D4F17;
+            --accent: #FF6B35;
+            --accent-light: #FF8A65;
+            --gold: #FFD700;
+            --gold-dark: #FFC107;
+            --dark: #0A0A0A;
+            --dark-light: #1A1A1A;
+            --light: #F8FAFC;
+            --light-gray: #F1F5F9;
+            --white: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+            --gradient-hero: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: var(--light);
+            color: var(--text-primary);
             line-height: 1.6;
-            color: #333;
+            font-size: 16px;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1440px;
             margin: 0 auto;
-            background: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: var(--white);
             min-height: 100vh;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
+            box-shadow: var(--shadow-xl);
             position: relative;
         }
 
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .admin-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .admin-toggle:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        /* Progress Bar */
-        .progress-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .progress-info {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .progress-text {
-            font-size: 16px;
-            color: #495057;
-            margin-bottom: 10px;
-        }
-
-        .progress-bar {
-            background: #e9ecef;
-            border-radius: 10px;
-            height: 10px;
+        /* Modern Header */
+        .header {
+            background: var(--gradient-hero);
+            color: var(--white);
+            position: relative;
             overflow: hidden;
-            max-width: 400px;
-            margin: 0 auto;
         }
 
-        .progress-fill {
-            background: linear-gradient(90deg, #28a745, #20c997);
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
-            width: 0%;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
-        /* Main Content */
-        .main-content {
-            padding: 40px;
+        .header-nav {
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
         }
 
-        /* Welcome Screen */
-        .welcome-screen {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-
-        .welcome-icon {
-            font-size: 80px;
-            margin-bottom: 30px;
-        }
-
-        .welcome-title {
-            font-size: 2.5em;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .welcome-subtitle {
-            font-size: 1.2em;
-            color: #6c757d;
-            margin-bottom: 40px;
-        }
-
-        .start-btn {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             font-weight: 600;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+            font-size: 0.9rem;
+            letter-spacing: 0.025em;
         }
 
-        .start-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        /* Voting Form */
-        .voting-form {
+        .admin-link {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .header-main {
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ABFC Logo SVG */
+        .club-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.2));
+        }
+
+        .club-name {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, var(--white) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .club-full-name {
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .club-tagline {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: 500;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            letter-spacing: 0.025em;
+        }
+
+        .awards-badge {
+            background: var(--gradient-accent);
+            color: var(--dark);
+            padding: 0.875rem 2rem;
+            border-radius: 50px;
+            font-size: 1.125rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+            border: 2px solid var(--white);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Navigation Breadcrumb */
+        .breadcrumb {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
             display: none;
-            max-width: 800px;
-            margin: 0 auto;
         }
 
-        .voting-form.active {
+        .breadcrumb.show {
             display: block;
         }
 
-        .form-header {
+        .breadcrumb-nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Modern Progress Section */
+        .progress-section {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 2rem;
+            display: none;
+        }
+
+        .progress-section.show {
+            display: block;
+        }
+
+        .progress-container {
+            max-width: 1200px;
+            margin: 0 auto;
             text-align: center;
-            margin-bottom: 40px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 15px;
         }
 
-        .category-counter {
-            font-size: 16px;
-            color: #6c757d;
-            margin-bottom: 10px;
+        .progress-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
         }
 
-        .category-title {
-            font-size: 2em;
-            color: #2c3e50;
-            margin-bottom: 15px;
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .progress-stat {
+            text-align: center;
+        }
+
+        .progress-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.075em;
+        }
+
+        .progress-bar-wrapper {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            height: 16px;
+            overflow: hidden;
+            max-width: 500px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            background: var(--gradient-accent);
+            height: 100%;
+            border-radius: 50px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Welcome Section - Modern Design */
+        .welcome-section {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .welcome-hero {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 4rem 3rem;
+            border-radius: var(--border-radius-xl);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255, 215, 0, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            background: var(--gradient-accent);
+            color: var(--dark);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.125rem;
             font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        .category-description {
-            font-size: 1.1em;
-            color: #495057;
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.5);
+        }
+
+        /* Modern Card Designs */
+        .card {
+            background: var(--white);
+            border-radius: var(--border-radius-xl);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        /* Voter Information Card */
+        .voter-card {
+            margin-bottom: 3rem;
+            display: none;
+        }
+
+        .voter-card.show {
+            display: block;
+        }
+
+        .card-header {
+            padding: 2rem 2.5rem 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .card-body {
+            padding: 2.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
         .form-group {
-            margin-bottom: 30px;
+            position: relative;
         }
 
         .form-label {
             display: block;
-            font-size: 18px;
+            font-size: 0.875rem;
             font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 10px;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .form-input {
             width: 100%;
-            padding: 15px;
-            font-size: 16px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            background: #f8f9fa;
-            transition: all 0.3s ease;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius);
+            background: var(--light);
+            transition: var(--transition);
             font-family: inherit;
+            color: var(--text-primary);
         }
 
         .form-input:focus {
             outline: none;
-            border-color: #007bff;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Voting Section */
+        .voting-section {
+            display: none;
+        }
+
+        .voting-section.show {
+            display: block;
+        }
+
+        .category-card {
+            margin-bottom: 3rem;
+        }
+
+        .category-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 3rem 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 75%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 25%, rgba(255, 215, 0, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .category-counter {
+            font-size: 0.875rem;
+            font-weight: 600;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-title {
+            font-size: clamp(1.875rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-description {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .voting-input-section {
+            padding: 3rem 2.5rem;
+            text-align: center;
+        }
+
+        .voting-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 1.5rem 2rem;
+            font-size: 1.25rem;
+            font-weight: 500;
+            border: 3px solid var(--border);
+            border-radius: var(--border-radius-lg);
+            background: var(--light);
+            transition: var(--transition);
+            font-family: inherit;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .voting-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(27, 94, 32, 0.15);
+            transform: translateY(-2px);
         }
 
         .save-indicator {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #28a745;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: var(--success);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: var(--transition);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .save-indicator.show {
             opacity: 1;
         }
 
-        /* Navigation Buttons */
-        .form-navigation {
+        /* Navigation Controls */
+        .navigation-controls {
             display: flex;
-            gap: 20px;
             justify-content: center;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid #dee2e6;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
         }
 
-        .nav-btn {
-            padding: 15px 30px;
-            font-size: 16px;
+        .nav-button {
+            padding: 1rem 2rem;
+            font-size: 1rem;
             font-weight: 600;
             border: none;
-            border-radius: 25px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 120px;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            min-width: 150px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(27, 94, 32, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+            box-shadow: 0 8px 25px rgba(27, 94, 32, 0.4);
         }
 
         .btn-secondary {
-            background: #6c757d;
-            color: white;
+            background: var(--white);
+            color: var(--text-secondary);
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow);
         }
 
         .btn-secondary:hover {
-            background: #5a6268;
+            background: var(--light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+            background: var(--gradient-accent);
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            font-weight: 700;
         }
 
         .btn-success:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
         }
 
-        /* Success Screen */
-        .success-screen {
+        /* Success Section */
+        .success-section {
             display: none;
             text-align: center;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 60px 20px;
         }
 
-        .success-screen.active {
+        .success-section.show {
             display: block;
         }
 
+        .success-hero {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 4rem 3rem;
+            border-radius: var(--border-radius-xl);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255, 215, 0, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
         .success-icon {
-            font-size: 100px;
-            margin-bottom: 30px;
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
         }
 
         .success-title {
-            font-size: 2.5em;
-            color: #28a745;
-            margin-bottom: 20px;
-            font-weight: 700;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
         }
 
         .success-subtitle {
-            font-size: 1.2em;
-            color: #6c757d;
-            margin-bottom: 40px;
+            font-size: 1.125rem;
+            opacity: 0.9;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
         }
 
-        .success-actions {
+        /* Sharing Section */
+        .sharing-section {
+            background: var(--light-gray);
+            border-radius: var(--border-radius-xl);
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .sharing-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .sharing-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .sharing-buttons {
             display: flex;
-            gap: 20px;
             justify-content: center;
+            gap: 1rem;
             flex-wrap: wrap;
+        }
+
+        .share-button {
+            background: var(--white);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow);
+        }
+
+        .share-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .share-button.whatsapp {
+            border-color: #25D366;
+            color: #25D366;
+        }
+
+        .share-button.whatsapp:hover {
+            background: #25D366;
+            color: var(--white);
+        }
+
+        .share-button.copy {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .share-button.copy:hover {
+            background: var(--primary);
+            color: var(--white);
         }
 
         /* Admin Panel */
         .admin-panel {
             display: none;
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 20px;
+            margin: 2rem;
+            margin-bottom: 4rem;
         }
 
-        .admin-panel.active {
+        .admin-panel.show {
             display: block;
         }
 
+        .admin-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 2.5rem;
+            text-align: center;
+            border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 75%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 25%, rgba(255, 215, 0, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
         .admin-title {
-            color: #856404;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-body {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+            border: 1px solid var(--border);
+            border-top: none;
         }
 
         .admin-section {
-            margin-bottom: 30px;
+            margin-bottom: 3rem;
         }
 
-        .admin-section h4 {
-            color: #856404;
-            margin-bottom: 15px;
-            font-size: 1.1em;
+        .admin-section:last-child {
+            margin-bottom: 0;
         }
 
-        .google-sheets-setup {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #ffeaa7;
-            margin-bottom: 20px;
+        .admin-section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        .url-input {
+        .google-sheets-card {
+            background: var(--light);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .sheets-input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 10px;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--white);
+        }
+
+        .sheets-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.1);
+        }
+
+        .sheets-status {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .admin-actions {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            gap: 1rem;
         }
 
-        .admin-btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
+        .admin-button {
+            background: var(--white);
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius-lg);
             cursor: pointer;
-            font-size: 14px;
+            transition: var(--transition);
             font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .admin-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .btn-info { background: #17a2b8; color: white; }
-        .btn-warning { background: #ffc107; color: #212529; }
-        .btn-danger { background: #dc3545; color: white; }
-
-        /* Share Buttons */
-        .share-section {
-            background: #e8f4f8;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 40px 0;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             text-align: center;
         }
 
-        .share-title {
-            font-size: 1.3em;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-weight: 600;
+        .admin-button:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
         }
 
-        .share-buttons {
+        .admin-button.info { border-color: #3B82F6; color: #3B82F6; }
+        .admin-button.info:hover { background: #3B82F6; color: var(--white); }
+
+        .admin-button.warning { border-color: var(--warning); color: #D97706; }
+        .admin-button.warning:hover { background: var(--warning); color: var(--white); }
+
+        .admin-button.danger { border-color: var(--danger); color: var(--danger); }
+        .admin-button.danger:hover { background: var(--danger); color: var(--white); }
+
+        /* Results Display */
+        .results-display {
+            display: none;
+            margin: 3rem 2rem;
+        }
+
+        .results-display.show {
+            display: block;
+        }
+
+        .results-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+        }
+
+        .results-title {
+            font-size: 1.75rem;
+            font-weight: 700;
             display: flex;
-            gap: 15px;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
+            gap: 0.75rem;
         }
 
-        .share-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-whatsapp {
-            background: #25d366;
-            color: white;
-        }
-
-        .btn-whatsapp:hover {
-            background: #22c55e;
-            transform: translateY(-2px);
-        }
-
-        .btn-copy {
-            background: #6366f1;
-            color: white;
-        }
-
-        .btn-copy:hover {
-            background: #5855eb;
-            transform: translateY(-2px);
+        .results-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+            border: 1px solid var(--border);
+            border-top: none;
+            font-family: 'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+            color: var(--text-primary);
+            background: var(--light-gray);
         }
 
         /* Toast Notifications */
         .toast {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
+            top: 2rem;
+            right: 2rem;
+            background: var(--white);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-lg);
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-xl);
             z-index: 1000;
             opacity: 0;
             transform: translateX(100%);
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            border-left: 4px solid var(--success);
+            max-width: 350px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .toast.show {
@@ -467,98 +1055,139 @@
             transform: translateX(0);
         }
 
-        .toast.error {
-            background: #dc3545;
-        }
-
-        .toast.warning {
-            background: #ffc107;
-            color: #212529;
-        }
-
-        /* Results Display */
-        .results-container {
-            display: none;
-            background: #e8f5e8;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 40px 0;
-        }
-
-        .results-container.active {
-            display: block;
-        }
-
-        .results-title {
-            color: #155724;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .results-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            white-space: pre-wrap;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #c3e6cb;
-        }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+        .toast.success { border-left-color: var(--success); }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                margin: 0;
-                box-shadow: none;
+        @media (max-width: 1024px) {
+            .header-nav {
+                padding: 0.75rem 1.5rem;
             }
-
-            .header {
-                padding: 30px 15px;
+            
+            .header-main {
+                padding: 3rem 1.5rem;
             }
-
-            .header h1 {
-                font-size: 2em;
-            }
-
+            
             .main-content {
-                padding: 20px 15px;
+                padding: 2rem 1.5rem;
             }
+        }
 
-            .form-navigation {
+        @media (max-width: 768px) {
+            :root {
+                font-size: 14px;
+            }
+            
+            .header-nav {
+                padding: 0.75rem 1rem;
+            }
+            
+            .nav-brand {
+                font-size: 0.8rem;
+            }
+            
+            .admin-link {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.8rem;
+            }
+            
+            .header-main {
+                padding: 2rem 1rem;
+            }
+            
+            .club-logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+            
+            .welcome-hero,
+            .success-hero {
+                padding: 2.5rem 2rem;
+            }
+            
+            .card-header,
+            .card-body,
+            .voting-input-section,
+            .category-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .navigation-controls {
                 flex-direction: column;
-                align-items: center;
+                gap: 1rem;
             }
-
-            .nav-btn {
+            
+            .nav-button {
                 width: 100%;
-                max-width: 300px;
+                max-width: 280px;
             }
-
-            .success-actions {
+            
+            .sharing-buttons {
                 flex-direction: column;
                 align-items: center;
+                max-width: 280px;
+                margin: 0 auto;
             }
-
-            .share-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .share-btn {
+            
+            .share-button {
                 width: 100%;
-                max-width: 250px;
+                justify-content: center;
             }
-
+            
+            .progress-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
             .admin-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-panel {
+                margin: 1rem;
+            }
+            
+            .toast {
+                top: 1rem;
+                right: 1rem;
+                left: 1rem;
+                transform: translateY(-100%);
+                max-width: none;
+            }
+            
+            .toast.show {
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-hero,
+            .success-hero,
+            .category-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .card-body,
+            .voting-input-section {
+                padding: 1.5rem;
+            }
+            
+            .progress-grid {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* Loading State */
+        /* Loading States */
         .loading {
             opacity: 0.6;
             pointer-events: none;
@@ -566,133 +1195,338 @@
 
         .spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ffffff;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
+            border-top-color: currentColor;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Focus Styles */
+        *:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        button:focus,
+        .nav-button:focus,
+        .admin-button:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <button class="admin-toggle" onclick="toggleAdmin()">⚙️ Admin</button>
-            <h1>🏆 ABFC Awards 2025</h1>
-            <p>Annual Player Recognition Voting System</p>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="progress-section" id="progressSection" style="display: none;">
-            <div class="progress-info">
-                <div class="progress-text" id="progressText">0 of 11 categories completed</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+        <!-- Modern Header -->
+        <header class="header">
+            <nav class="header-nav">
+                <div class="nav-brand">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Season 2025</span>
+                    <span>•</span>
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Official Portal</span>
+                </div>
+                <div class="nav-actions">
+                    <a href="#admin" class="admin-link" onclick="toggleAdmin(event)">
+                        <i class="fas fa-cog"></i> Admin Portal
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="header-main">
+                <!-- ABFC Logo SVG -->
+                <svg class="club-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer Circle -->
+                    <circle cx="100" cy="100" r="95" fill="none" stroke="#FFD700" stroke-width="4"/>
+                    
+                    <!-- Soccer Ball -->
+                    <circle cx="100" cy="100" r="45" fill="#FFFFFF" stroke="#1B5E20" stroke-width="3"/>
+                    
+                    <!-- Soccer Ball Pattern -->
+                    <g stroke="#1B5E20" stroke-width="2" fill="none">
+                        <!-- Pentagon in center -->
+                        <polygon points="100,70 115,82 109,102 91,102 85,82" fill="#1B5E20"/>
+                        
+                        <!-- Hexagonal pattern -->
+                        <path d="M100,55 L115,67 L109,87 L91,87 L85,67 Z"/>
+                        <path d="M85,67 L100,55 L115,67 L130,75 L125,95 L109,87 Z"/>
+                        <path d="M115,67 L130,75 L145,67 L140,87 L125,95 L109,87 Z"/>
+                        <path d="M70,75 L85,67 L100,55 L85,47 L70,55 L75,75 Z"/>
+                        <path d="M85,82 L91,102 L75,110 L60,102 L66,82 L75,75 Z"/>
+                        <path d="M115,82 L109,102 L125,110 L140,102 L134,82 L125,95 Z"/>
+                    </g>
+                    
+                    <!-- ABFC Letters around the circle -->
+                    <g fill="#FF6B35" font-family="Inter, sans-serif" font-weight="900" font-size="32">
+                        <!-- A at top -->
+                        <text x="100" y="25" text-anchor="middle" dominant-baseline="central">A</text>
+                        <!-- B at right -->
+                        <text x="175" y="100" text-anchor="middle" dominant-baseline="central">B</text>
+                        <!-- F at bottom -->
+                        <text x="100" y="185" text-anchor="middle" dominant-baseline="central">F</text>
+                        <!-- C at left -->
+                        <text x="25" y="100" text-anchor="middle" dominant-baseline="central">C</text>
+                    </g>
+                    
+                    <!-- Decorative elements -->
+                    <g fill="#FFD700">
+                        <circle cx="60" cy="40" r="3"/>
+                        <circle cx="140" cy="40" r="3"/>
+                        <circle cx="160" cy="160" r="3"/>
+                        <circle cx="40" cy="160" r="3"/>
+                    </g>
+                </svg>
+                
+                <h1 class="club-name">ABFC</h1>
+                <p class="club-full-name">Afrobeat Football Club</p>
+                <p class="club-tagline">Excellence • Unity • Victory</p>
+                <div class="awards-badge">
+                    <i class="fas fa-trophy"></i>
+                    2025 Awards Voting
                 </div>
             </div>
-        </div>
+        </header>
+
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb" id="breadcrumb">
+            <div class="breadcrumb-nav">
+                <div class="breadcrumb-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </div>
+                <i class="fas fa-chevron-right breadcrumb-separator"></i>
+                <div class="breadcrumb-item">
+                    <i class="fas fa-vote-yea"></i>
+                    <span id="breadcrumbText">Voting</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Progress Section -->
+        <section class="progress-section" id="progressSection">
+            <div class="progress-container">
+                <h3 class="progress-title">Your Voting Progress</h3>
+                <div class="progress-grid">
+                    <div class="progress-stat">
+                        <span class="progress-number" id="completedCount">0</span>
+                        <span class="progress-label">Completed</span>
+                    </div>
+                    <div class="progress-stat">
+                        <span class="progress-number" id="remainingCount">9</span>
+                        <span class="progress-label">Remaining</span>
+                    </div>
+                    <div class="progress-stat">
+                        <span class="progress-number" id="progressPercentage">0%</span>
+                        <span class="progress-label">Progress</span>
+                    </div>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
 
         <!-- Admin Panel -->
-        <div class="admin-panel" id="adminPanel">
-            <div class="admin-title">🔐 Admin Dashboard</div>
-            
-            <div class="admin-section">
-                <h4>Google Sheets Integration</h4>
-                <div class="google-sheets-setup">
-                    <input type="text" class="url-input" id="googleSheetUrl" 
-                           placeholder="Paste your Google Apps Script URL here...">
-                    <button class="nav-btn btn-primary" onclick="saveGoogleSheetUrl()">Save Google Sheets URL</button>
-                    <div id="sheetStatus" style="margin-top: 10px; font-size: 14px; color: #6c757d;"></div>
-                </div>
+        <div class="admin-panel card" id="adminPanel">
+            <div class="admin-header">
+                <h2 class="admin-title">
+                    <i class="fas fa-shield-alt"></i> Admin Dashboard
+                </h2>
+                <p class="admin-subtitle">Manage the Afrobeat Football Club Awards voting system</p>
             </div>
+            
+            <div class="admin-body">
+                <div class="admin-section">
+                    <h3 class="admin-section-title">
+                        <i class="fas fa-table"></i> Google Sheets Integration
+                    </h3>
+                    <div class="google-sheets-card">
+                        <input type="text" class="sheets-input" id="googleSheetUrl" 
+                               placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+                        <button class="nav-button btn-primary" onclick="saveGoogleSheetUrl()">
+                            <i class="fas fa-save"></i> Save Configuration
+                        </button>
+                        <div class="sheets-status" id="sheetStatus">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Google Sheets not configured
+                        </div>
+                    </div>
+                </div>
 
-            <div class="admin-section">
-                <h4>Admin Actions</h4>
-                <div class="admin-actions">
-                    <button class="admin-btn btn-info" onclick="exportData()">📊 Export CSV</button>
-                    <button class="admin-btn btn-warning" onclick="viewAllResults()">📈 View Results</button>
-                    <button class="admin-btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
-                    <button class="admin-btn btn-warning" onclick="toggleVotingStatus()" id="votingToggle">🚫 Close Voting</button>
+                <div class="admin-section">
+                    <h3 class="admin-section-title">
+                        <i class="fas fa-tools"></i> System Controls
+                    </h3>
+                    <div class="admin-actions">
+                        <button class="admin-button info" onclick="exportData()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                        <button class="admin-button info" onclick="viewAllResults()">
+                            <i class="fas fa-chart-bar"></i> View Results
+                        </button>
+                        <button class="admin-button warning" onclick="toggleVotingStatus()" id="votingToggle">
+                            <i class="fas fa-ban"></i> Close Voting
+                        </button>
+                        <button class="admin-button danger" onclick="clearAllData()">
+                            <i class="fas fa-trash"></i> Clear Data
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="main-content">
-            <!-- Welcome Screen -->
-            <div class="welcome-screen" id="welcomeScreen">
-                <div class="welcome-icon">🏆</div>
-                <h2 class="welcome-title">Welcome to ABFC Awards 2025</h2>
-                <p class="welcome-subtitle">
-                    Vote for your favorite players across 11 different categories. 
-                    Your progress is automatically saved as you go through each category.
-                </p>
-                <button class="start-btn" onclick="startVoting()">Start Voting</button>
-            </div>
-
-            <!-- Voting Form -->
-            <div class="voting-form" id="votingForm">
-                <div class="form-header">
-                    <div class="category-counter" id="categoryCounter">Category 1 of 11</div>
-                    <h2 class="category-title" id="categoryTitle">Best Goalkeeper</h2>
-                    <p class="category-description" id="categoryDescription">Vote for the goalkeeper who performed best this season</p>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="voteInput">Your Vote</label>
-                    <input type="text" class="form-input" id="voteInput" placeholder="Enter the player's name...">
-                    <div class="save-indicator" id="saveIndicator">✓ Saved automatically</div>
-                </div>
-
-                <div class="form-navigation">
-                    <button class="nav-btn btn-secondary" id="backBtn" onclick="previousCategory()" style="display: none;">
-                        ← Previous
-                    </button>
-                    <button class="nav-btn btn-primary" id="nextBtn" onclick="nextCategory()">
-                        Next Category →
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section" id="welcomeSection">
+                <div class="welcome-hero">
+                    <div class="welcome-icon">🏆</div>
+                    <h2 class="welcome-title">Cast Your Vote for Excellence</h2>
+                    <p class="welcome-subtitle">
+                        Join us in celebrating the outstanding performances and contributions of our Afrobeat Football Club family. 
+                        Vote across 9 prestigious categories and help us honor the best of our club.
+                    </p>
+                    <button class="cta-button" onclick="startVoting()">
+                        <i class="fas fa-play"></i>
+                        Begin Voting Process
                     </button>
                 </div>
-            </div>
+            </section>
 
-            <!-- Success Screen -->
-            <div class="success-screen" id="successScreen">
-                <div class="success-icon">🎉</div>
-                <h2 class="success-title">Thank You!</h2>
-                <p class="success-subtitle">
-                    Your votes have been successfully submitted for the ABFC Awards 2025.
-                    Thank you for participating!
-                </p>
-                <div class="success-actions">
-                    <button class="nav-btn btn-success" onclick="shareResults()">📤 Share Results</button>
-                    <button class="nav-btn btn-primary" onclick="viewResults()">📊 View Results</button>
+            <!-- Voter Information Card -->
+            <section class="voter-card card" id="voterCard">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-circle"></i>
+                        Voter Registration
+                    </h3>
+                    <p class="card-subtitle">Please provide your information to proceed with voting</p>
                 </div>
-            </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="voterName">
+                                <i class="fas fa-signature"></i> Full Name *
+                            </label>
+                            <input type="text" class="form-input" id="voterName" 
+                                   placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="voterEmail">
+                                <i class="fas fa-envelope"></i> Email Address
+                            </label>
+                            <input type="email" class="form-input" id="voterEmail" 
+                                   placeholder="your.email@example.com">
+                        </div>
+                    </div>
+                    <div class="navigation-controls">
+                        <button class="nav-button btn-primary" onclick="proceedToVoting()">
+                            <i class="fas fa-arrow-right"></i>
+                            Proceed to Categories
+                        </button>
+                    </div>
+                </div>
+            </section>
 
-            <!-- Share Section -->
-            <div class="share-section">
-                <h3 class="share-title">Share ABFC Awards Voting</h3>
-                <div class="share-buttons">
-                    <button class="share-btn btn-whatsapp" onclick="shareWhatsApp()">
-                        📱 Share on WhatsApp
+            <!-- Voting Section -->
+            <section class="voting-section" id="votingSection">
+                <div class="category-card card">
+                    <div class="category-header">
+                        <div class="category-counter" id="categoryCounter">Category 1 of 9</div>
+                        <h2 class="category-title" id="categoryTitle">
+                            <i class="fas fa-hand-paper"></i> Best Goalkeeper
+                        </h2>
+                        <p class="category-description" id="categoryDescription">
+                            Vote for the goalkeeper who demonstrated exceptional skill, consistency, and leadership throughout the season.
+                        </p>
+                    </div>
+
+                    <div class="voting-input-section">
+                        <input type="text" class="voting-input" id="votingInput" 
+                               placeholder="Enter the player's name">
+                        <div class="save-indicator" id="saveIndicator">
+                            <i class="fas fa-check-circle"></i>
+                            Vote saved automatically
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation-controls">
+                    <button class="nav-button btn-secondary" id="prevButton" 
+                            onclick="previousCategory()" style="display: none;">
+                        <i class="fas fa-arrow-left"></i>
+                        Previous
                     </button>
-                    <button class="share-btn btn-copy" onclick="copyLink()">
-                        🔗 Copy Link
+                    <button class="nav-button btn-primary" id="nextButton" onclick="nextCategory()">
+                        <i class="fas fa-arrow-right"></i>
+                        Next Category
                     </button>
                 </div>
-            </div>
+            </section>
 
-            <!-- Results Display -->
-            <div class="results-container" id="resultsContainer">
-                <h3 class="results-title">📊 Voting Results</h3>
-                <div class="results-content" id="resultsContent"></div>
+            <!-- Success Section -->
+            <section class="success-section" id="successSection">
+                <div class="success-hero">
+                    <div class="success-icon">🎉</div>
+                    <h2 class="success-title">Vote Submitted Successfully!</h2>
+                    <p class="success-subtitle">
+                        Thank you for participating in the Afrobeat Football Club Awards 2025. Your votes have been recorded 
+                        and will contribute to celebrating our club's finest achievements this season.
+                    </p>
+                </div>
+                
+                <div class="navigation-controls">
+                    <button class="nav-button btn-success" onclick="shareResults()">
+                        <i class="fas fa-share-alt"></i>
+                        Share Results
+                    </button>
+                    <button class="nav-button btn-primary" onclick="viewResults()">
+                        <i class="fas fa-chart-line"></i>
+                        View Current Results
+                    </button>
+                </div>
+            </section>
+
+            <!-- Sharing Section -->
+            <section class="sharing-section">
+                <h3 class="sharing-title">
+                    <i class="fas fa-bullhorn"></i> Share ABFC Awards
+                </h3>
+                <p class="sharing-subtitle">Help spread the word about our club awards voting</p>
+                <div class="sharing-buttons">
+                    <button class="share-button whatsapp" onclick="shareWhatsApp()">
+                        <i class="fab fa-whatsapp"></i>
+                        Share on WhatsApp
+                    </button>
+                    <button class="share-button copy" onclick="copyLink()">
+                        <i class="fas fa-link"></i>
+                        Copy Voting Link
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Results Display -->
+        <div class="results-display card" id="resultsDisplay">
+            <div class="results-header">
+                <h3 class="results-title">
+                    <i class="fas fa-poll-h"></i>
+                    Live Voting Results
+                </h3>
             </div>
+            <div class="results-content" id="resultsContent"></div>
         </div>
     </div>
 
@@ -703,23 +1537,59 @@
         // App State
         let currentCategory = 0;
         let votes = {};
+        let voterInfo = {};
         let allVotes = [];
         let votingEnabled = true;
         let hasVoted = false;
+        let currentSection = 'welcome';
 
-        // Categories Configuration
+        // Updated Categories Configuration (9 categories)
         const categories = [
-            { title: 'Best Goalkeeper', description: 'Vote for the goalkeeper who performed best this season' },
-            { title: 'Best Defender', description: 'Vote for the most solid and reliable defender' },
-            { title: 'Best Midfielder', description: 'Vote for the midfielder who controlled the game best' },
-            { title: 'Best Striker', description: 'Vote for the most effective goal scorer' },
-            { title: 'Best Utility Player', description: 'Vote for the most versatile player' },
-            { title: 'Team Lead of the Year', description: 'Vote for the best captain or coach' },
-            { title: 'Most Improved Player', description: 'Vote for the player who improved the most' },
-            { title: 'Best Behaved Player', description: 'Vote for the most disciplined and respectful player' },
-            { title: 'Best Contribution to ABFC', description: 'Vote for who contributed most to the club' },
-            { title: 'Most Frequent Player', description: 'Vote for the most active player (Botanic and Social Media)' },
-            { title: 'Most Dragged Player', description: 'Vote for the player who got teased the most' }
+            { 
+                title: 'Best Goalkeeper', 
+                description: 'Vote for the goalkeeper who demonstrated exceptional skill, consistency, and leadership throughout the season.',
+                icon: 'fas fa-hand-paper'
+            },
+            { 
+                title: 'Best Defender', 
+                description: 'Recognize the defender who showed outstanding defensive skills, tactical awareness, and team protection.',
+                icon: 'fas fa-shield-alt'
+            },
+            { 
+                title: 'Best Midfielder', 
+                description: 'Honor the midfielder who controlled the game with exceptional passing, creativity, and field vision.',
+                icon: 'fas fa-running'
+            },
+            { 
+                title: 'Best Striker', 
+                description: 'Celebrate the striker who consistently found the back of the net and led our attacking force.',
+                icon: 'fas fa-crosshairs'
+            },
+            { 
+                title: 'Best Winger', 
+                description: 'Vote for the winger who provided pace, skill, and creativity on the flanks throughout the season.',
+                icon: 'fas fa-plane'
+            },
+            { 
+                title: 'Best Utility Player', 
+                description: 'Vote for the most versatile player who excelled in multiple positions and situations.',
+                icon: 'fas fa-exchange-alt'
+            },
+            { 
+                title: 'Most Improved Player', 
+                description: 'Celebrate the player who showed remarkable growth and development this season.',
+                icon: 'fas fa-chart-line'
+            },
+            { 
+                title: 'Best Behaved Player', 
+                description: 'Honor the player who exemplified sportsmanship, discipline, and respect on and off the field.',
+                icon: 'fas fa-medal'
+            },
+            { 
+                title: 'Most Frequent Player', 
+                description: 'Vote for the most active and engaged player across all club activities and social media.',
+                icon: 'fas fa-calendar-check'
+            }
         ];
 
         // Initialize
@@ -728,11 +1598,12 @@
             setupEventListeners();
             checkVotingStatus();
             updateGoogleSheetsStatus();
+            updateRemainingCount();
         });
 
         function setupEventListeners() {
-            // Auto-save when typing
-            document.getElementById('voteInput').addEventListener('input', function() {
+            // Auto-save voting input
+            document.getElementById('votingInput').addEventListener('input', function() {
                 const value = this.value.trim();
                 if (value) {
                     votes[currentCategory] = value;
@@ -741,9 +1612,35 @@
                     updateProgress();
                 }
             });
+
+            // Auto-save voter information
+            ['voterName', 'voterEmail'].forEach(id => {
+                document.getElementById(id).addEventListener('input', function() {
+                    voterInfo[id] = this.value.trim();
+                    localStorage.setItem('abfc_voter_info', JSON.stringify(voterInfo));
+                });
+            });
+
+            // Handle Enter key in voting input
+            document.getElementById('votingInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (this.value.trim()) {
+                        nextCategory();
+                    }
+                }
+            });
         }
 
         function loadStoredData() {
+            // Load voter information
+            const storedVoterInfo = localStorage.getItem('abfc_voter_info');
+            if (storedVoterInfo) {
+                voterInfo = JSON.parse(storedVoterInfo);
+                document.getElementById('voterName').value = voterInfo.voterName || '';
+                document.getElementById('voterEmail').value = voterInfo.voterEmail || '';
+            }
+
             // Load individual votes
             const storedVotes = localStorage.getItem('abfc_individual_votes');
             if (storedVotes) {
@@ -769,9 +1666,13 @@
 
         function checkVotingStatus() {
             if (hasVoted) {
-                showSuccessScreen();
-                showToast('Welcome back! You have already voted.', 'warning');
+                showSuccessSection();
+                showToast('Welcome back! You have already submitted your vote.', 'success');
             }
+        }
+
+        function updateRemainingCount() {
+            document.getElementById('remainingCount').textContent = categories.length;
         }
 
         function startVoting() {
@@ -785,9 +1686,38 @@
                 return;
             }
 
-            document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('votingForm').classList.add('active');
-            document.getElementById('progressSection').style.display = 'block';
+            currentSection = 'voter-info';
+            document.getElementById('welcomeSection').style.display = 'none';
+            document.getElementById('voterCard').classList.add('show');
+            document.getElementById('breadcrumb').classList.add('show');
+            document.getElementById('breadcrumbText').textContent = 'Voter Registration';
+            
+            // Focus on name input
+            setTimeout(() => {
+                document.getElementById('voterName').focus();
+            }, 100);
+        }
+
+        function proceedToVoting() {
+            const voterName = document.getElementById('voterName').value.trim();
+            
+            if (!voterName) {
+                showToast('Please enter your full name to continue.', 'warning');
+                document.getElementById('voterName').focus();
+                return;
+            }
+
+            // Save voter info
+            voterInfo.voterName = voterName;
+            voterInfo.voterEmail = document.getElementById('voterEmail').value.trim();
+            localStorage.setItem('abfc_voter_info', JSON.stringify(voterInfo));
+
+            // Show voting section
+            currentSection = 'voting';
+            document.getElementById('voterCard').classList.remove('show');
+            document.getElementById('votingSection').classList.add('show');
+            document.getElementById('progressSection').classList.add('show');
+            document.getElementById('breadcrumbText').textContent = 'Category Voting';
             
             currentCategory = 0;
             updateCategoryDisplay();
@@ -797,40 +1727,46 @@
         function updateCategoryDisplay() {
             const category = categories[currentCategory];
             
-            document.getElementById('categoryCounter').textContent = `Category ${currentCategory + 1} of ${categories.length}`;
-            document.getElementById('categoryTitle').textContent = category.title;
+            document.getElementById('categoryCounter').textContent = 
+                `Category ${currentCategory + 1} of ${categories.length}`;
+            document.getElementById('categoryTitle').innerHTML = 
+                `<i class="${category.icon}"></i> ${category.title}`;
             document.getElementById('categoryDescription').textContent = category.description;
             
             // Load existing vote
             const existingVote = votes[currentCategory] || '';
-            document.getElementById('voteInput').value = existingVote;
-            document.getElementById('voteInput').focus();
+            document.getElementById('votingInput').value = existingVote;
             
             // Update navigation buttons
-            const backBtn = document.getElementById('backBtn');
-            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevButton');
+            const nextBtn = document.getElementById('nextButton');
             
             if (currentCategory === 0) {
-                backBtn.style.display = 'none';
+                prevBtn.style.display = 'none';
             } else {
-                backBtn.style.display = 'inline-block';
+                prevBtn.style.display = 'inline-flex';
             }
             
             if (currentCategory === categories.length - 1) {
-                nextBtn.textContent = 'Submit All Votes';
-                nextBtn.className = 'nav-btn btn-success';
+                nextBtn.innerHTML = '<i class="fas fa-check"></i> Submit All Votes';
+                nextBtn.className = 'nav-button btn-success';
             } else {
-                nextBtn.textContent = 'Next Category →';
-                nextBtn.className = 'nav-btn btn-primary';
+                nextBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Next Category';
+                nextBtn.className = 'nav-button btn-primary';
             }
+
+            // Focus on input
+            setTimeout(() => {
+                document.getElementById('votingInput').focus();
+            }, 100);
         }
 
         function nextCategory() {
-            const voteValue = document.getElementById('voteInput').value.trim();
+            const voteValue = document.getElementById('votingInput').value.trim();
             
             if (!voteValue) {
                 showToast('Please enter your vote before continuing.', 'warning');
-                document.getElementById('voteInput').focus();
+                document.getElementById('votingInput').focus();
                 return;
             }
             
@@ -863,9 +1799,9 @@
                 return;
             }
 
-            const nextBtn = document.getElementById('nextBtn');
-            const originalText = nextBtn.textContent;
-            nextBtn.innerHTML = 'Submitting... <span class="spinner"></span>';
+            const nextBtn = document.getElementById('nextButton');
+            const originalHTML = nextBtn.innerHTML;
+            nextBtn.innerHTML = '<div class="spinner"></div> Submitting...';
             nextBtn.disabled = true;
 
             try {
@@ -873,6 +1809,8 @@
                 const voteRecord = {
                     timestamp: new Date().toISOString(),
                     deviceId: getDeviceId(),
+                    voterName: voterInfo.voterName,
+                    voterEmail: voterInfo.voterEmail || '',
                     votes: {}
                 };
 
@@ -889,7 +1827,7 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(voteRecord)
                     });
-                    showToast('✅ Vote submitted to Google Sheets!', 'success');
+                    showToast('✅ Vote submitted to Google Sheets successfully!', 'success');
                 } else {
                     showToast('⚠️ Google Sheets not configured. Vote saved locally.', 'warning');
                 }
@@ -903,17 +1841,19 @@
                 
                 // Show success screen after delay
                 setTimeout(() => {
-                    showSuccessScreen();
+                    showSuccessSection();
                 }, 1500);
 
             } catch (error) {
                 console.error('Error submitting vote:', error);
-                showToast('❌ Error submitting to Google Sheets. Saved locally.', 'error');
+                showToast('❌ Error submitting to Google Sheets. Vote saved locally as backup.', 'error');
                 
                 // Still save locally
                 const voteRecord = {
                     timestamp: new Date().toISOString(),
                     deviceId: getDeviceId(),
+                    voterName: voterInfo.voterName,
+                    voterEmail: voterInfo.voterEmail || '',
                     votes: {...votes}
                 };
                 
@@ -922,26 +1862,34 @@
                 localStorage.setItem('abfc_has_voted', 'true');
                 hasVoted = true;
                 
-                showSuccessScreen();
+                showSuccessSection();
             } finally {
-                nextBtn.textContent = originalText;
+                nextBtn.innerHTML = originalHTML;
                 nextBtn.disabled = false;
             }
         }
 
-        function showSuccessScreen() {
-            document.getElementById('votingForm').classList.remove('active');
-            document.getElementById('progressSection').style.display = 'none';
-            document.getElementById('successScreen').classList.add('active');
+        function showSuccessSection() {
+            currentSection = 'success';
+            document.getElementById('votingSection').classList.remove('show');
+            document.getElementById('progressSection').classList.remove('show');
+            document.getElementById('successSection').classList.add('show');
+            document.getElementById('breadcrumbText').textContent = 'Vote Completed';
+            
+            // Update progress to 100%
+            updateProgress();
         }
 
         function updateProgress() {
             const completedVotes = Object.keys(votes).length;
-            const percentage = Math.round((completedVotes / categories.length) * 100);
+            const totalCategories = categories.length;
+            const percentage = Math.round((completedVotes / totalCategories) * 100);
+            const remaining = totalCategories - completedVotes;
             
-            document.getElementById('progressText').textContent = 
-                `${completedVotes} of ${categories.length} categories completed (${percentage}%)`;
-            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('completedCount').textContent = completedVotes;
+            document.getElementById('remainingCount').textContent = remaining;
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
         }
 
         function showSaveIndicator() {
@@ -949,7 +1897,7 @@
             indicator.classList.add('show');
             setTimeout(() => {
                 indicator.classList.remove('show');
-            }, 2000);
+            }, 2500);
         }
 
         function getDeviceId() {
@@ -962,9 +1910,14 @@
         }
 
         // Admin Functions
-        function toggleAdmin() {
+        function toggleAdmin(event) {
+            event.preventDefault();
             const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('active');
+            panel.classList.toggle('show');
+            
+            if (panel.classList.contains('show')) {
+                panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         function saveGoogleSheetUrl() {
@@ -982,31 +1935,31 @@
             localStorage.setItem('abfc_google_sheet_url', url);
             GOOGLE_SHEET_URL = url;
             updateGoogleSheetsStatus();
-            showToast('Google Sheets URL saved successfully!', 'success');
+            showToast('Google Sheets configuration saved successfully!', 'success');
         }
 
         function updateGoogleSheetsStatus() {
             const statusEl = document.getElementById('sheetStatus');
             if (GOOGLE_SHEET_URL) {
-                statusEl.textContent = '✅ Google Sheets connected';
-                statusEl.style.color = '#28a745';
+                statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Google Sheets connected and ready';
+                statusEl.style.color = 'var(--success)';
             } else {
-                statusEl.textContent = '❌ Google Sheets not configured';
-                statusEl.style.color = '#dc3545';
+                statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Google Sheets not configured';
+                statusEl.style.color = 'var(--danger)';
             }
         }
 
         function exportData() {
             if (allVotes.length === 0) {
-                showToast('No votes to export', 'warning');
+                showToast('No votes available to export', 'warning');
                 return;
             }
 
-            let csv = 'Timestamp,Device ID,';
+            let csv = 'Timestamp,Device ID,Voter Name,Voter Email,';
             csv += categories.map(cat => cat.title).join(',') + '\n';
 
             allVotes.forEach(vote => {
-                let row = `"${vote.timestamp}","${vote.deviceId}",`;
+                let row = `"${vote.timestamp}","${vote.deviceId}","${vote.voterName}","${vote.voterEmail}",`;
                 const voteValues = categories.map(cat => {
                     return `"${vote.votes[cat.title] || ''}"`;
                 }).join(',');
@@ -1024,7 +1977,7 @@
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
 
-            showToast('CSV exported successfully!', 'success');
+            showToast('CSV file exported successfully!', 'success');
         }
 
         function viewAllResults() {
@@ -1033,19 +1986,20 @@
                 return;
             }
 
-            let results = `ABFC Awards Results Summary\n`;
-            results += `Total Votes: ${allVotes.length}\n`;
+            let results = `AFROBEAT FOOTBALL CLUB - Awards 2025 Results\n`;
+            results += `${'='.repeat(50)}\n`;
+            results += `Total Votes Recorded: ${allVotes.length}\n`;
             results += `Generated: ${new Date().toLocaleString()}\n\n`;
 
-            categories.forEach(category => {
-                results += `${category.title}:\n`;
-                results += `${'='.repeat(category.title.length + 1)}\n`;
+            categories.forEach((category, index) => {
+                results += `${index + 1}. ${category.title}\n`;
+                results += `${'-'.repeat(category.title.length + 3)}\n`;
 
                 const voteCounts = {};
                 allVotes.forEach(vote => {
                     const userVote = vote.votes[category.title];
                     if (userVote && userVote.trim()) {
-                        voteCounts[userVote] = (voteCounts[userVote] || 0) + 1;
+                        voteCounts[userVote.trim()] = (voteCounts[userVote.trim()] || 0) + 1;
                     }
                 });
 
@@ -1053,8 +2007,9 @@
                     .sort((a, b) => b[1] - a[1]);
 
                 if (sortedVotes.length > 0) {
-                    sortedVotes.forEach(([player, count]) => {
-                        results += `  ${player}: ${count} vote${count > 1 ? 's' : ''}\n`;
+                    sortedVotes.forEach(([player, count], index) => {
+                        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '  ';
+                        results += `  ${medal} ${player}: ${count} vote${count > 1 ? 's' : ''}\n`;
                     });
                 } else {
                     results += `  No votes recorded yet\n`;
@@ -1062,34 +2017,47 @@
                 results += `\n`;
             });
 
-            results += `\nNote: This shows local backup data only.\nCheck your Google Sheet for complete results!`;
+            results += `\nNote: This shows local backup data only.\n`;
+            results += `Check your Google Sheet for complete live results!\n`;
+            results += `\nAFROBEAT FC - Excellence • Unity • Victory`;
             
             document.getElementById('resultsContent').textContent = results;
-            document.getElementById('resultsContainer').classList.add('active');
+            document.getElementById('resultsDisplay').classList.add('show');
             
             // Scroll to results
-            document.getElementById('resultsContainer').scrollIntoView({ 
+            document.getElementById('resultsDisplay').scrollIntoView({ 
                 behavior: 'smooth' 
             });
         }
 
         function clearAllData() {
-            if (confirm('⚠️ This will permanently delete ALL voting data. Are you sure?')) {
-                if (confirm('This action cannot be undone. Continue?')) {
+            if (confirm('⚠️ This will permanently delete ALL voting data and reset the system. Are you sure?')) {
+                if (confirm('This action cannot be undone. All votes and voter information will be lost. Continue?')) {
                     localStorage.clear();
                     votes = {};
+                    voterInfo = {};
                     allVotes = [];
                     hasVoted = false;
                     currentCategory = 0;
+                    currentSection = 'welcome';
                     
                     // Reset display
-                    document.getElementById('welcomeScreen').style.display = 'block';
-                    document.getElementById('votingForm').classList.remove('active');
-                    document.getElementById('successScreen').classList.remove('active');
-                    document.getElementById('progressSection').style.display = 'none';
-                    document.getElementById('resultsContainer').classList.remove('active');
+                    document.getElementById('welcomeSection').style.display = 'block';
+                    document.getElementById('voterCard').classList.remove('show');
+                    document.getElementById('votingSection').classList.remove('show');
+                    document.getElementById('successSection').classList.remove('show');
+                    document.getElementById('progressSection').classList.remove('show');
+                    document.getElementById('breadcrumb').classList.remove('show');
+                    document.getElementById('resultsDisplay').classList.remove('show');
+                    document.getElementById('adminPanel').classList.remove('show');
                     
-                    showToast('All data cleared successfully', 'success');
+                    // Clear form fields
+                    document.getElementById('voterName').value = '';
+                    document.getElementById('voterEmail').value = '';
+                    document.getElementById('votingInput').value = '';
+                    
+                    updateRemainingCount();
+                    showToast('All data cleared successfully. System reset to initial state.', 'success');
                 }
             }
         }
@@ -1099,20 +2067,20 @@
             const btn = document.getElementById('votingToggle');
             
             if (votingEnabled) {
-                btn.textContent = '🚫 Close Voting';
-                btn.className = 'admin-btn btn-warning';
-                showToast('Voting is now open', 'success');
+                btn.innerHTML = '<i class="fas fa-ban"></i> Close Voting';
+                btn.className = 'admin-button warning';
+                showToast('Voting is now open for all users', 'success');
             } else {
-                btn.textContent = '✅ Open Voting';
-                btn.className = 'admin-btn btn-info';
-                showToast('Voting is now closed', 'warning');
+                btn.innerHTML = '<i class="fas fa-play"></i> Open Voting';
+                btn.className = 'admin-button info';
+                showToast('Voting has been closed', 'warning');
             }
         }
 
         // Sharing Functions
         function shareWhatsApp() {
             const url = window.location.href;
-            const text = encodeURIComponent(`🏆 Vote for ABFC Awards 2025!\n\nCast your vote for the best players: ${url}\n\n⚽ Only takes 2 minutes!\n✅ Mobile-friendly voting`);
+            const text = encodeURIComponent(`🏆 AFROBEAT FOOTBALL CLUB Awards 2025 - Official Voting!\n\n⚽ Cast your vote for our club's finest players\n🎯 9 prestigious categories to vote on\n✅ Quick & secure voting process\n\nVote now: ${url}\n\nAFROBEAT FC - Excellence • Unity • Victory 🏆`);
             window.open(`https://wa.me/?text=${text}`, '_blank');
         }
 
@@ -1120,7 +2088,7 @@
             const url = window.location.href;
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(url).then(() => {
-                    showToast('Link copied to clipboard!', 'success');
+                    showToast('Voting link copied to clipboard! Share it with the team.', 'success');
                 });
             } else {
                 // Fallback for older browsers
@@ -1130,13 +2098,13 @@
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                showToast('Link copied to clipboard!', 'success');
+                showToast('Voting link copied to clipboard!', 'success');
             }
         }
 
         function shareResults() {
             const url = window.location.href;
-            const text = encodeURIComponent(`🏆 ABFC Awards 2025 results are in!\n\nCheck out who won: ${url}\n\nThank you to everyone who voted! 🎉`);
+            const text = encodeURIComponent(`🎉 AFROBEAT FC Awards 2025 Results Are In!\n\n🏆 See who won our prestigious club awards\n⭐ Celebrating our season's best performances\n🎖️ Thank you to everyone who voted!\n\nView results: ${url}\n\nAFROBEAT FC - Excellence • Unity • Victory 🏆`);
             window.open(`https://wa.me/?text=${text}`, '_blank');
         }
 
@@ -1148,14 +2116,19 @@
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.textContent = message;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                        type === 'warning' ? 'fa-exclamation-triangle' : 
+                        'fa-times-circle';
+                        
+            toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
             document.body.appendChild(toast);
 
             setTimeout(() => toast.classList.add('show'), 100);
             setTimeout(() => {
                 toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+                setTimeout(() => toast.remove(), 400);
+            }, 4000);
         }
     </script>
 </body>
