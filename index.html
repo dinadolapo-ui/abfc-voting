@@ -1354,13 +1354,14 @@
                     </h3>
                     <div class="google-sheets-card">
                         <input type="text" class="sheets-input" id="googleSheetUrl" 
-                               placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+                               placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
+                               value="https://script.google.com/macros/s/AKfycbwn3z_zCDQih8zdN2quKvX9Brhew_sbyR8DBVvhFe9Z05XhSDRKJhH8b_h4YeTEchhx2w/exec">
                         <button class="nav-button btn-primary" onclick="saveGoogleSheetUrl()">
                             <i class="fas fa-save"></i> Save Configuration
                         </button>
                         <div class="sheets-status" id="sheetStatus">
-                            <i class="fas fa-exclamation-triangle"></i> 
-                            Google Sheets not configured
+                            <i class="fas fa-check-circle"></i> 
+                            Google Sheets connected and ready
                         </div>
                     </div>
                 </div>
@@ -1532,7 +1533,7 @@
 
     <script>
         // Configuration
-        let GOOGLE_SHEET_URL = localStorage.getItem('abfc_google_sheet_url') || '';
+        let GOOGLE_SHEET_URL = localStorage.getItem('abfc_google_sheet_url') || 'https://script.google.com/macros/s/AKfycbwn3z_zCDQih8zdN2quKvX9Brhew_sbyR8DBVvhFe9Z05XhSDRKJhH8b_h4YeTEchhx2w/exec';
         
         // App State
         let currentCategory = 0;
@@ -1599,6 +1600,11 @@
             checkVotingStatus();
             updateGoogleSheetsStatus();
             updateRemainingCount();
+            
+            // Auto-save the Google Sheets URL if not already saved
+            if (!localStorage.getItem('abfc_google_sheet_url')) {
+                localStorage.setItem('abfc_google_sheet_url', GOOGLE_SHEET_URL);
+            }
         });
 
         function setupEventListeners() {
@@ -1661,6 +1667,10 @@
             if (storedUrl) {
                 GOOGLE_SHEET_URL = storedUrl;
                 document.getElementById('googleSheetUrl').value = storedUrl;
+            } else if (GOOGLE_SHEET_URL) {
+                // Use the default URL if no stored URL exists
+                document.getElementById('googleSheetUrl').value = GOOGLE_SHEET_URL;
+                localStorage.setItem('abfc_google_sheet_url', GOOGLE_SHEET_URL);
             }
         }
 
@@ -1940,7 +1950,7 @@
 
         function updateGoogleSheetsStatus() {
             const statusEl = document.getElementById('sheetStatus');
-            if (GOOGLE_SHEET_URL) {
+            if (GOOGLE_SHEET_URL && GOOGLE_SHEET_URL.includes('script.google.com')) {
                 statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Google Sheets connected and ready';
                 statusEl.style.color = 'var(--success)';
             } else {
