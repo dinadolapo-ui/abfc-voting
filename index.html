@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABFC Awards 2025 - Voting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .admin-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-toggle:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .progress-info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-text {
+            font-size: 16px;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .welcome-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-title {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2em;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+
+        /* Voting Form */
+        .voting-form {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .voting-form.active {
+            display: block;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .category-counter {
+            font-size: 16px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .category-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .category-description {
+            font-size: 1.1em;
+            color: #495057;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #007bff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        .save-indicator {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #28a745;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+        }
+
+        /* Navigation Buttons */
+        .form-navigation {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+        }
+
+        /* Success Screen */
+        .success-screen {
+            display: none;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .success-screen.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+        }
+
+        .success-title {
+            font-size: 2.5em;
+            color: #28a745;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .success-subtitle {
+            font-size: 1.2em;
+            color: #6c757d;
+            margin-bottom: 40px;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-title {
+            color: #856404;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .admin-section {
+            margin-bottom: 30px;
+        }
+
+        .admin-section h4 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .google-sheets-setup {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ffeaa7;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .admin-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-info { background: #17a2b8; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        /* Share Buttons */
+        .share-section {
+            background: #e8f4f8;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .share-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #22c55e;
+            transform: translateY(-2px);
+        }
+
+        .btn-copy {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background: #5855eb;
+            transform: translateY(-2px);
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        .toast.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        /* Results Display */
+        .results-container {
+            display: none;
+            background: #e8f5e8;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .results-title {
+            color: #155724;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .results-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                box-shadow: none;
+            }
+
+            .header {
+                padding: 30px 15px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .form-navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .success-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .share-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .admin-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="admin-toggle" onclick="toggleAdmin()">⚙️ Admin</button>
+            <h1>🏆 ABFC Awards 2025</h1>
+            <p>Annual Player Recognition Voting System</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="progress-info">
+                <div class="progress-text" id="progressText">0 of 11 categories completed</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="adminPanel">
+            <div class="admin-title">🔐 Admin Dashboard</div>
+            
+            <div class="admin-section">
+                <h4>Google Sheets Integration</h4>
+                <div class="google-sheets-setup">
+                    <input type="text" class="url-input" id="googleSheetUrl" 
+                           placeholder="Paste your Google Apps Script URL here...">
+                    <button class="nav-btn btn-primary" onclick="saveGoogleSheetUrl()">Save Google Sheets URL</button>
+                    <div id="sheetStatus" style="margin-top: 10px; font-size: 14px; color: #6c757d;"></div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h4>Admin Actions</h4>
+                <div class="admin-actions">
+                    <button class="admin-btn btn-info" onclick="exportData()">📊 Export CSV</button>
+                    <button class="admin-btn btn-warning" onclick="viewAllResults()">📈 View Results</button>
+                    <button class="admin-btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+                    <button class="admin-btn btn-warning" onclick="toggleVotingStatus()" id="votingToggle">🚫 Close Voting</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-icon">🏆</div>
+                <h2 class="welcome-title">Welcome to ABFC Awards 2025</h2>
+                <p class="welcome-subtitle">
+                    Vote for your favorite players across 11 different categories. 
+                    Your progress is automatically saved as you go through each category.
+                </p>
+                <button class="start-btn" onclick="startVoting()">Start Voting</button>
+            </div>
+
+            <!-- Voting Form -->
+            <div class="voting-form" id="votingForm">
+                <div class="form-header">
+                    <div class="category-counter" id="categoryCounter">Category 1 of 11</div>
+                    <h2 class="category-title" id="categoryTitle">Best Goalkeeper</h2>
+                    <p class="category-description" id="categoryDescription">Vote for the goalkeeper who performed best this season</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="voteInput">Your Vote</label>
+                    <input type="text" class="form-input" id="voteInput" placeholder="Enter the player's name...">
+                    <div class="save-indicator" id="saveIndicator">✓ Saved automatically</div>
+                </div>
+
+                <div class="form-navigation">
+                    <button class="nav-btn btn-secondary" id="backBtn" onclick="previousCategory()" style="display: none;">
+                        ← Previous
+                    </button>
+                    <button class="nav-btn btn-primary" id="nextBtn" onclick="nextCategory()">
+                        Next Category →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon">🎉</div>
+                <h2 class="success-title">Thank You!</h2>
+                <p class="success-subtitle">
+                    Your votes have been successfully submitted for the ABFC Awards 2025.
+                    Thank you for participating!
+                </p>
+                <div class="success-actions">
+                    <button class="nav-btn btn-success" onclick="shareResults()">📤 Share Results</button>
+                    <button class="nav-btn btn-primary" onclick="viewResults()">📊 View Results</button>
+                </div>
+            </div>
+
+            <!-- Share Section -->
+            <div class="share-section">
+                <h3 class="share-title">Share ABFC Awards Voting</h3>
+                <div class="share-buttons">
+                    <button class="share-btn btn-whatsapp" onclick="shareWhatsApp()">
+                        📱 Share on WhatsApp
+                    </button>
+                    <button class="share-btn btn-copy" onclick="copyLink()">
+                        🔗 Copy Link
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Display -->
+            <div class="results-container" id="resultsContainer">
+                <h3 class="results-title">📊 Voting Results</h3>
+                <div class="results-content" id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        let GOOGLE_SHEET_URL = localStorage.getItem('abfc_google_sheet_url') || '';
+        
+        // App State
+        let currentCategory = 0;
+        let votes = {};
+        let allVotes = [];
+        let votingEnabled = true;
+        let hasVoted = false;
+
+        // Categories Configuration
+        const categories = [
+            { title: 'Best Goalkeeper', description: 'Vote for the goalkeeper who performed best this season' },
+            { title: 'Best Defender', description: 'Vote for the most solid and reliable defender' },
+            { title: 'Best Midfielder', description: 'Vote for the midfielder who controlled the game best' },
+            { title: 'Best Striker', description: 'Vote for the most effective goal scorer' },
+            { title: 'Best Utility Player', description: 'Vote for the most versatile player' },
+            { title: 'Team Lead of the Year', description: 'Vote for the best captain or coach' },
+            { title: 'Most Improved Player', description: 'Vote for the player who improved the most' },
+            { title: 'Best Behaved Player', description: 'Vote for the most disciplined and respectful player' },
+            { title: 'Best Contribution to ABFC', description: 'Vote for who contributed most to the club' },
+            { title: 'Most Frequent Player', description: 'Vote for the most active player (Botanic and Social Media)' },
+            { title: 'Most Dragged Player', description: 'Vote for the player who got teased the most' }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStoredData();
+            setupEventListeners();
+            checkVotingStatus();
+            updateGoogleSheetsStatus();
+        });
+
+        function setupEventListeners() {
+            // Auto-save when typing
+            document.getElementById('voteInput').addEventListener('input', function() {
+                const value = this.value.trim();
+                if (value) {
+                    votes[currentCategory] = value;
+                    localStorage.setItem('abfc_individual_votes', JSON.stringify(votes));
+                    showSaveIndicator();
+                    updateProgress();
+                }
+            });
+        }
+
+        function loadStoredData() {
+            // Load individual votes
+            const storedVotes = localStorage.getItem('abfc_individual_votes');
+            if (storedVotes) {
+                votes = JSON.parse(storedVotes);
+            }
+
+            // Load all submitted votes
+            const storedAllVotes = localStorage.getItem('abfc_all_votes');
+            if (storedAllVotes) {
+                allVotes = JSON.parse(storedAllVotes);
+            }
+
+            // Check if user has voted
+            hasVoted = localStorage.getItem('abfc_has_voted') === 'true';
+            
+            // Load Google Sheets URL
+            const storedUrl = localStorage.getItem('abfc_google_sheet_url');
+            if (storedUrl) {
+                GOOGLE_SHEET_URL = storedUrl;
+                document.getElementById('googleSheetUrl').value = storedUrl;
+            }
+        }
+
+        function checkVotingStatus() {
+            if (hasVoted) {
+                showSuccessScreen();
+                showToast('Welcome back! You have already voted.', 'warning');
+            }
+        }
+
+        function startVoting() {
+            if (hasVoted) {
+                showToast('You have already submitted your vote!', 'warning');
+                return;
+            }
+
+            if (!votingEnabled) {
+                showToast('Voting is currently closed.', 'error');
+                return;
+            }
+
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('votingForm').classList.add('active');
+            document.getElementById('progressSection').style.display = 'block';
+            
+            currentCategory = 0;
+            updateCategoryDisplay();
+            updateProgress();
+        }
+
+        function updateCategoryDisplay() {
+            const category = categories[currentCategory];
+            
+            document.getElementById('categoryCounter').textContent = `Category ${currentCategory + 1} of ${categories.length}`;
+            document.getElementById('categoryTitle').textContent = category.title;
+            document.getElementById('categoryDescription').textContent = category.description;
+            
+            // Load existing vote
+            const existingVote = votes[currentCategory] || '';
+            document.getElementById('voteInput').value = existingVote;
+            document.getElementById('voteInput').focus();
+            
+            // Update navigation buttons
+            const backBtn = document.getElementById('backBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentCategory === 0) {
+                backBtn.style.display = 'none';
+            } else {
+                backBtn.style.display = 'inline-block';
+            }
+            
+            if (currentCategory === categories.length - 1) {
+                nextBtn.textContent = 'Submit All Votes';
+                nextBtn.className = 'nav-btn btn-success';
+            } else {
+                nextBtn.textContent = 'Next Category →';
+                nextBtn.className = 'nav-btn btn-primary';
+            }
+        }
+
+        function nextCategory() {
+            const voteValue = document.getElementById('voteInput').value.trim();
+            
+            if (!voteValue) {
+                showToast('Please enter your vote before continuing.', 'warning');
+                document.getElementById('voteInput').focus();
+                return;
+            }
+            
+            // Save current vote
+            votes[currentCategory] = voteValue;
+            localStorage.setItem('abfc_individual_votes', JSON.stringify(votes));
+            
+            if (currentCategory === categories.length - 1) {
+                // Submit all votes
+                submitAllVotes();
+            } else {
+                // Go to next category
+                currentCategory++;
+                updateCategoryDisplay();
+                updateProgress();
+            }
+        }
+
+        function previousCategory() {
+            if (currentCategory > 0) {
+                currentCategory--;
+                updateCategoryDisplay();
+                updateProgress();
+            }
+        }
+
+        async function submitAllVotes() {
+            if (hasVoted) {
+                showToast('You have already submitted your votes!', 'error');
+                return;
+            }
+
+            const nextBtn = document.getElementById('nextBtn');
+            const originalText = nextBtn.textContent;
+            nextBtn.innerHTML = 'Submitting... <span class="spinner"></span>';
+            nextBtn.disabled = true;
+
+            try {
+                // Create vote record
+                const voteRecord = {
+                    timestamp: new Date().toISOString(),
+                    deviceId: getDeviceId(),
+                    votes: {}
+                };
+
+                // Map votes to category titles
+                categories.forEach((category, index) => {
+                    voteRecord.votes[category.title] = votes[index] || '';
+                });
+
+                // Submit to Google Sheets if configured
+                if (GOOGLE_SHEET_URL) {
+                    await fetch(GOOGLE_SHEET_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(voteRecord)
+                    });
+                    showToast('✅ Vote submitted to Google Sheets!', 'success');
+                } else {
+                    showToast('⚠️ Google Sheets not configured. Vote saved locally.', 'warning');
+                }
+
+                // Save locally as backup
+                allVotes.push(voteRecord);
+                localStorage.setItem('abfc_all_votes', JSON.stringify(allVotes));
+                localStorage.setItem('abfc_has_voted', 'true');
+                
+                hasVoted = true;
+                
+                // Show success screen after delay
+                setTimeout(() => {
+                    showSuccessScreen();
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error submitting vote:', error);
+                showToast('❌ Error submitting to Google Sheets. Saved locally.', 'error');
+                
+                // Still save locally
+                const voteRecord = {
+                    timestamp: new Date().toISOString(),
+                    deviceId: getDeviceId(),
+                    votes: {...votes}
+                };
+                
+                allVotes.push(voteRecord);
+                localStorage.setItem('abfc_all_votes', JSON.stringify(allVotes));
+                localStorage.setItem('abfc_has_voted', 'true');
+                hasVoted = true;
+                
+                showSuccessScreen();
+            } finally {
+                nextBtn.textContent = originalText;
+                nextBtn.disabled = false;
+            }
+        }
+
+        function showSuccessScreen() {
+            document.getElementById('votingForm').classList.remove('active');
+            document.getElementById('progressSection').style.display = 'none';
+            document.getElementById('successScreen').classList.add('active');
+        }
+
+        function updateProgress() {
+            const completedVotes = Object.keys(votes).length;
+            const percentage = Math.round((completedVotes / categories.length) * 100);
+            
+            document.getElementById('progressText').textContent = 
+                `${completedVotes} of ${categories.length} categories completed (${percentage}%)`;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('abfc_device_id');
+            if (!deviceId) {
+                deviceId = 'device_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('abfc_device_id', deviceId);
+            }
+            return deviceId;
+        }
+
+        // Admin Functions
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('active');
+        }
+
+        function saveGoogleSheetUrl() {
+            const url = document.getElementById('googleSheetUrl').value.trim();
+            if (!url) {
+                showToast('Please enter a valid URL', 'warning');
+                return;
+            }
+
+            if (!url.includes('script.google.com') || !url.includes('/exec')) {
+                showToast('Please enter a valid Google Apps Script URL', 'error');
+                return;
+            }
+
+            localStorage.setItem('abfc_google_sheet_url', url);
+            GOOGLE_SHEET_URL = url;
+            updateGoogleSheetsStatus();
+            showToast('Google Sheets URL saved successfully!', 'success');
+        }
+
+        function updateGoogleSheetsStatus() {
+            const statusEl = document.getElementById('sheetStatus');
+            if (GOOGLE_SHEET_URL) {
+                statusEl.textContent = '✅ Google Sheets connected';
+                statusEl.style.color = '#28a745';
+            } else {
+                statusEl.textContent = '❌ Google Sheets not configured';
+                statusEl.style.color = '#dc3545';
+            }
+        }
+
+        function exportData() {
+            if (allVotes.length === 0) {
+                showToast('No votes to export', 'warning');
+                return;
+            }
+
+            let csv = 'Timestamp,Device ID,';
+            csv += categories.map(cat => cat.title).join(',') + '\n';
+
+            allVotes.forEach(vote => {
+                let row = `"${vote.timestamp}","${vote.deviceId}",`;
+                const voteValues = categories.map(cat => {
+                    return `"${vote.votes[cat.title] || ''}"`;
+                }).join(',');
+                row += voteValues;
+                csv += row + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ABFC_Awards_Votes_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            showToast('CSV exported successfully!', 'success');
+        }
+
+        function viewAllResults() {
+            if (allVotes.length === 0) {
+                showToast('No votes submitted yet. Check your Google Sheet for live results!', 'warning');
+                return;
+            }
+
+            let results = `ABFC Awards Results Summary\n`;
+            results += `Total Votes: ${allVotes.length}\n`;
+            results += `Generated: ${new Date().toLocaleString()}\n\n`;
+
+            categories.forEach(category => {
+                results += `${category.title}:\n`;
+                results += `${'='.repeat(category.title.length + 1)}\n`;
+
+                const voteCounts = {};
+                allVotes.forEach(vote => {
+                    const userVote = vote.votes[category.title];
+                    if (userVote && userVote.trim()) {
+                        voteCounts[userVote] = (voteCounts[userVote] || 0) + 1;
+                    }
+                });
+
+                const sortedVotes = Object.entries(voteCounts)
+                    .sort((a, b) => b[1] - a[1]);
+
+                if (sortedVotes.length > 0) {
+                    sortedVotes.forEach(([player, count]) => {
+                        results += `  ${player}: ${count} vote${count > 1 ? 's' : ''}\n`;
+                    });
+                } else {
+                    results += `  No votes recorded yet\n`;
+                }
+                results += `\n`;
+            });
+
+            results += `\nNote: This shows local backup data only.\nCheck your Google Sheet for complete results!`;
+            
+            document.getElementById('resultsContent').textContent = results;
+            document.getElementById('resultsContainer').classList.add('active');
+            
+            // Scroll to results
+            document.getElementById('resultsContainer').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ This will permanently delete ALL voting data. Are you sure?')) {
+                if (confirm('This action cannot be undone. Continue?')) {
+                    localStorage.clear();
+                    votes = {};
+                    allVotes = [];
+                    hasVoted = false;
+                    currentCategory = 0;
+                    
+                    // Reset display
+                    document.getElementById('welcomeScreen').style.display = 'block';
+                    document.getElementById('votingForm').classList.remove('active');
+                    document.getElementById('successScreen').classList.remove('active');
+                    document.getElementById('progressSection').style.display = 'none';
+                    document.getElementById('resultsContainer').classList.remove('active');
+                    
+                    showToast('All data cleared successfully', 'success');
+                }
+            }
+        }
+
+        function toggleVotingStatus() {
+            votingEnabled = !votingEnabled;
+            const btn = document.getElementById('votingToggle');
+            
+            if (votingEnabled) {
+                btn.textContent = '🚫 Close Voting';
+                btn.className = 'admin-btn btn-warning';
+                showToast('Voting is now open', 'success');
+            } else {
+                btn.textContent = '✅ Open Voting';
+                btn.className = 'admin-btn btn-info';
+                showToast('Voting is now closed', 'warning');
+            }
+        }
+
+        // Sharing Functions
+        function shareWhatsApp() {
+            const url = window.location.href;
+            const text = encodeURIComponent(`🏆 Vote for ABFC Awards 2025!\n\nCast your vote for the best players: ${url}\n\n⚽ Only takes 2 minutes!\n✅ Mobile-friendly voting`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        function copyLink() {
+            const url = window.location.href;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('Link copied to clipboard!', 'success');
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Link copied to clipboard!', 'success');
+            }
+        }
+
+        function shareResults() {
+            const url = window.location.href;
+            const text = encodeURIComponent(`🏆 ABFC Awards 2025 results are in!\n\nCheck out who won: ${url}\n\nThank you to everyone who voted! 🎉`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        function viewResults() {
+            viewAllResults();
+        }
+
+        // Utility Functions
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
