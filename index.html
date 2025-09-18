@@ -1352,79 +1352,144 @@
 
         <!-- Admin Panel -->
         <div class="admin-panel card" id="adminPanel">
-            <div class="admin-header">
-                <h2 class="admin-title">
-                    <i class="fas fa-shield-alt"></i> Admin Dashboard
-                </h2>
-                <p class="admin-subtitle">Manage the Afrobeat Football Club Awards voting system</p>
-            </div>
-            
-            <div class="admin-body">
-                <!-- EMERGENCY RESET SECTION - Always visible -->
-                <div class="admin-section" style="background: #fee2e2; border: 2px solid #fecaca; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
-                    <h3 style="color: #dc2626; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-exclamation-triangle"></i> Emergency Reset
-                    </h3>
-                    <p style="color: #7f1d1d; margin-bottom: 1rem; font-size: 0.9rem;">
-                        If you're stuck with "already voted" message, use these buttons:
-                    </p>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                        <button class="nav-button btn-primary" onclick="forceResetNow()" style="background: #dc2626;">
-                            <i class="fas fa-redo"></i> FORCE RESET NOW
-                        </button>
-                        <button class="nav-button btn-secondary" onclick="emergencyWipe()">
-                            <i class="fas fa-bomb"></i> EMERGENCY WIPE
-                        </button>
-                    </div>
+            <!-- Admin Login Screen -->
+            <div class="admin-login" id="adminLogin">
+                <div class="admin-header">
+                    <h2 class="admin-title">
+                        <i class="fas fa-lock"></i> Admin Access Required
+                    </h2>
+                    <p class="admin-subtitle">Enter the admin passcode to access system controls</p>
                 </div>
-
-                <div class="admin-section">
-                    <h3 class="admin-section-title">
-                        <i class="fas fa-table"></i> Google Sheets Integration
-                    </h3>
-                    <div class="google-sheets-card">
-                        <input type="text" class="sheets-input" id="googleSheetUrl" 
-                               placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
-                               value="https://script.google.com/macros/s/AKfycbwn3z_zCDQih8zdN2quKvX9Brhew_sbyR8DBVvhFe9Z05XhSDRKJhH8b_h4YeTEchhx2w/exec">
-                        <button class="nav-button btn-primary" onclick="saveGoogleSheetUrl()">
-                            <i class="fas fa-save"></i> Save Configuration
-                        </button>
-                        <div class="sheets-status" id="sheetStatus">
-                            <i class="fas fa-check-circle"></i> 
-                            Google Sheets connected and ready
+                <div class="admin-body">
+                    <div style="max-width: 400px; margin: 0 auto;">
+                        <div class="form-group">
+                            <label class="form-label" for="adminPasscode">
+                                <i class="fas fa-key"></i> Admin Passcode
+                            </label>
+                            <input type="password" class="form-input" id="adminPasscode" 
+                                   placeholder="Enter admin passcode" 
+                                   style="text-align: center; font-size: 1.2em; font-weight: 600;">
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
+                                Contact ABFC administrator for access
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button class="nav-button btn-primary" onclick="verifyAdminAccess()" style="flex: 1;">
+                                <i class="fas fa-unlock"></i> Access Admin Panel
+                            </button>
+                            <button class="nav-button btn-secondary" onclick="closeAdminPanel()" style="flex: 1;">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                        
+                        <div id="adminLoginError" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); border-radius: 8px; color: var(--danger); text-align: center; font-weight: 600;">
+                            <i class="fas fa-exclamation-triangle"></i> Incorrect passcode. Access denied.
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="admin-section">
-                    <h3 class="admin-section-title">
-                        <i class="fas fa-tools"></i> System Controls
-                    </h3>
-                    <div style="background: var(--light-gray); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
-                        <strong>🎯 Testing Shortcuts:</strong><br>
-                        • <kbd>Ctrl+Shift+R</kbd> - Quick Reset for Testing<br>
-                        • <kbd>Ctrl+Shift+C</kbd> - Emergency Clear All<br>
-                        • <kbd>Ctrl+Shift+A</kbd> - Toggle Admin Panel
+            <!-- Admin Dashboard (Hidden until authenticated) -->
+            <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+                <div class="admin-header">
+                    <h2 class="admin-title">
+                        <i class="fas fa-shield-alt"></i> Admin Dashboard
+                    </h2>
+                    <p class="admin-subtitle">Manage the Afrobeat Football Club Awards voting system</p>
+                    <button onclick="logoutAdmin()" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-size: 0.8rem;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+                
+                <div class="admin-body">
+                    <!-- Duplicate Detection Section -->
+                    <div class="admin-section" style="background: #fef3c7; border: 2px solid #fbbf24; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+                        <h3 style="color: #92400e; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-exclamation-triangle"></i> Duplicate Vote Detection
+                        </h3>
+                        <p style="color: #78350f; margin-bottom: 1rem; font-size: 0.9rem;">
+                            <strong>Total Votes in System:</strong> <span id="totalVotesCount">0</span><br>
+                            <strong>Potential Duplicates:</strong> <span id="duplicateCount" style="color: var(--danger); font-weight: 700;">0</span>
+                        </p>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="admin-button warning" onclick="checkForDuplicates()">
+                                <i class="fas fa-search"></i> Scan for Duplicates
+                            </button>
+                            <button class="admin-button danger" onclick="removeDuplicates()">
+                                <i class="fas fa-broom"></i> Remove Duplicates
+                            </button>
+                        </div>
+                        <div id="duplicateResults" style="display: none; margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; font-family: monospace; font-size: 0.8em; max-height: 200px; overflow-y: auto;">
+                        </div>
                     </div>
-                    <div class="admin-actions">
-                        <button class="admin-button info" onclick="exportData()">
-                            <i class="fas fa-download"></i> Export CSV
-                        </button>
-                        <button class="admin-button info" onclick="viewAllResults()">
-                            <i class="fas fa-chart-bar"></i> View Results
-                        </button>
-                        <button class="admin-button warning" onclick="resetForTesting()">
-                            <i class="fas fa-redo"></i> Reset for Testing
-                        </button>
-                        <button class="admin-button warning" onclick="toggleVotingStatus()" id="votingToggle">
-                            <i class="fas fa-ban"></i> Close Voting
-                        </button>
-                        <button class="admin-button danger" onclick="clearAllData()">
-                            <i class="fas fa-trash"></i> Clear All Data
-                        </button>
-                        <button class="admin-button danger" onclick="emergencyClear()">
-                            <i class="fas fa-bomb"></i> Emergency Reset
-                        </button>
+
+                    <!-- EMERGENCY RESET SECTION - Always visible -->
+                    <div class="admin-section" style="background: #fee2e2; border: 2px solid #fecaca; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+                        <h3 style="color: #dc2626; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-exclamation-triangle"></i> Emergency Reset
+                        </h3>
+                        <p style="color: #7f1d1d; margin-bottom: 1rem; font-size: 0.9rem;">
+                            If you're stuck with "already voted" message, use these buttons:
+                        </p>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="nav-button btn-primary" onclick="forceResetNow()" style="background: #dc2626;">
+                                <i class="fas fa-redo"></i> FORCE RESET NOW
+                            </button>
+                            <button class="nav-button btn-secondary" onclick="emergencyWipe()">
+                                <i class="fas fa-bomb"></i> EMERGENCY WIPE
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="admin-section">
+                        <h3 class="admin-section-title">
+                            <i class="fas fa-table"></i> Google Sheets Integration
+                        </h3>
+                        <div class="google-sheets-card">
+                            <input type="text" class="sheets-input" id="googleSheetUrl" 
+                                   placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
+                                   value="https://script.google.com/macros/s/AKfycbwn3z_zCDQih8zdN2quKvX9Brhew_sbyR8DBVvhFe9Z05XhSDRKJhH8b_h4YeTEchhx2w/exec">
+                            <button class="nav-button btn-primary" onclick="saveGoogleSheetUrl()">
+                                <i class="fas fa-save"></i> Save Configuration
+                            </button>
+                            <div class="sheets-status" id="sheetStatus">
+                                <i class="fas fa-check-circle"></i> 
+                                Google Sheets connected and ready
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-section">
+                        <h3 class="admin-section-title">
+                            <i class="fas fa-tools"></i> System Controls
+                        </h3>
+                        <div style="background: var(--light-gray); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
+                            <strong>🎯 Testing Shortcuts:</strong><br>
+                            • <kbd>Ctrl+Shift+R</kbd> - Quick Reset for Testing<br>
+                            • <kbd>Ctrl+Shift+C</kbd> - Emergency Clear All<br>
+                            • <kbd>Ctrl+Shift+A</kbd> - Toggle Admin Panel
+                        </div>
+                        <div class="admin-actions">
+                            <button class="admin-button info" onclick="exportData()">
+                                <i class="fas fa-download"></i> Export CSV
+                            </button>
+                            <button class="admin-button info" onclick="viewAllResults()">
+                                <i class="fas fa-chart-bar"></i> View Results
+                            </button>
+                            <button class="admin-button warning" onclick="resetForTesting()">
+                                <i class="fas fa-redo"></i> Reset for Testing
+                            </button>
+                            <button class="admin-button warning" onclick="toggleVotingStatus()" id="votingToggle">
+                                <i class="fas fa-ban"></i> Close Voting
+                            </button>
+                            <button class="admin-button danger" onclick="clearAllData()">
+                                <i class="fas fa-trash"></i> Clear All Data
+                            </button>
+                            <button class="admin-button danger" onclick="emergencyClear()">
+                                <i class="fas fa-bomb"></i> Emergency Reset
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1615,6 +1680,10 @@
         // Configuration
         let GOOGLE_SHEET_URL = localStorage.getItem('abfc_google_sheet_url') || 'https://script.google.com/macros/s/AKfycbwn3z_zCDQih8zdN2quKvX9Brhew_sbyR8DBVvhFe9Z05XhSDRKJhH8b_h4YeTEchhx2w/exec';
         
+        // Admin Configuration
+        const ADMIN_PASSCODE = 'ABFC2025'; // Change this to your desired passcode
+        let isAdminAuthenticated = false;
+        
         // App State
         let currentCategory = 0;
         let votes = {};
@@ -1680,6 +1749,11 @@
             updateGoogleSheetsStatus();
             updateRemainingCount();
             
+            // Check for existing admin session
+            if (localStorage.getItem('abfc_admin_session') === 'true') {
+                isAdminAuthenticated = true;
+            }
+            
             // Auto-save the Google Sheets URL if not already saved
             if (!localStorage.getItem('abfc_google_sheet_url')) {
                 localStorage.setItem('abfc_google_sheet_url', GOOGLE_SHEET_URL);
@@ -1692,8 +1766,12 @@
                 // If user has voted, automatically show admin panel for easy reset
                 if (hasVoted) {
                     console.log('🔧 Previous vote detected - showing admin panel for easy reset');
+                    if (isAdminAuthenticated) {
+                        document.getElementById('adminLogin').style.display = 'none';
+                        document.getElementById('adminDashboard').style.display = 'block';
+                    }
                     document.getElementById('adminPanel').classList.add('show');
-                    showToast('⚠️ Previous vote detected! Use the red FORCE RESET button below to test again.', 'warning');
+                    showToast('⚠️ Previous vote detected! Use admin panel to reset for testing.', 'warning');
                 }
             }, 500);
         });
@@ -1742,16 +1820,24 @@
                 }
             });
 
+            // Handle Enter key in admin password field
+            document.getElementById('adminPasscode').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    verifyAdminAccess();
+                }
+            });
+
             // Admin keyboard shortcuts
             document.addEventListener('keydown', function(e) {
-                // Ctrl+Shift+R = Quick Reset for Testing
-                if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                // Ctrl+Shift+R = Quick Reset for Testing (admin only)
+                if (e.ctrlKey && e.shiftKey && e.key === 'R' && isAdminAuthenticated) {
                     e.preventDefault();
                     resetForTesting();
                 }
                 
-                // Ctrl+Shift+C = Emergency Clear
-                if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                // Ctrl+Shift+C = Emergency Clear (admin only)
+                if (e.ctrlKey && e.shiftKey && e.key === 'C' && isAdminAuthenticated) {
                     e.preventDefault();
                     emergencyClear();
                 }
@@ -1762,6 +1848,17 @@
                     const panel = document.getElementById('adminPanel');
                     panel.classList.toggle('show');
                     if (panel.classList.contains('show')) {
+                        if (isAdminAuthenticated) {
+                            document.getElementById('adminLogin').style.display = 'none';
+                            document.getElementById('adminDashboard').style.display = 'block';
+                            updateDuplicateStats();
+                        } else {
+                            document.getElementById('adminLogin').style.display = 'block';
+                            document.getElementById('adminDashboard').style.display = 'none';
+                            setTimeout(() => {
+                                document.getElementById('adminPasscode').focus();
+                            }, 300);
+                        }
                         panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 }
@@ -1855,6 +1952,11 @@
                 voterInfo = JSON.parse(storedVoterInfo);
                 document.getElementById('voterName').value = voterInfo.voterName || '';
                 document.getElementById('voterEmail').value = voterInfo.voterEmail || '';
+                
+                // Trigger validation for loaded data
+                setTimeout(() => {
+                    validateVoterForm();
+                }, 100);
             }
 
             // Load individual votes
@@ -1921,10 +2023,13 @@
                 document.getElementById('resultsDisplay').classList.remove('show');
                 document.getElementById('adminPanel').classList.remove('show');
                 
-                // Clear all form fields
+                // Clear all form fields and reset validation
                 document.getElementById('voterName').value = '';
                 document.getElementById('voterEmail').value = '';
                 document.getElementById('votingInput').value = '';
+                
+                // Reset voter form validation
+                resetVoterFormValidation();
                 
                 // Update progress
                 updateRemainingCount();
@@ -1942,6 +2047,26 @@
                 console.error('Force reset error:', error);
                 emergencyWipe();
             }
+        }
+
+        function resetVoterFormValidation() {
+            // Reset proceed button to disabled state
+            const proceedBtn = document.getElementById('proceedBtn');
+            proceedBtn.disabled = true;
+            proceedBtn.style.opacity = '0.5';
+            proceedBtn.style.cursor = 'not-allowed';
+            proceedBtn.innerHTML = '<i class="fas fa-lock"></i> Complete Required Fields First';
+            proceedBtn.style.background = '#6c757d';
+            
+            // Reset field styling
+            document.getElementById('voterName').style.borderColor = 'var(--danger)';
+            document.getElementById('voterEmail').style.borderColor = 'var(--danger)';
+            document.getElementById('voterName').style.boxShadow = 'none';
+            document.getElementById('voterEmail').style.boxShadow = 'none';
+            
+            // Hide validation messages
+            document.getElementById('nameValidation').style.display = 'none';
+            document.getElementById('emailValidation').style.display = 'none';
         }
 
         function emergencyWipe() {
@@ -1997,18 +2122,72 @@
 
         function proceedToVoting() {
             const voterName = document.getElementById('voterName').value.trim();
+            const voterEmail = document.getElementById('voterEmail').value.trim();
             
+            // Strict validation with detailed error messages
+            let errors = [];
+            
+            // Validate name
             if (!voterName) {
-                showToast('Please enter your full name to continue.', 'warning');
-                document.getElementById('voterName').focus();
+                errors.push('Full name is required');
+            } else if (voterName.length < 2) {
+                errors.push('Name must be at least 2 characters long');
+            } else if (!voterName.includes(' ')) {
+                errors.push('Please enter your complete full name (first and last name)');
+            } else if (voterName.length > 100) {
+                errors.push('Name is too long (maximum 100 characters)');
+            }
+            
+            // Validate email
+            if (!voterEmail) {
+                errors.push('Email address is required');
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(voterEmail)) {
+                errors.push('Please enter a valid email address (example: name@domain.com)');
+            } else if (voterEmail.length > 100) {
+                errors.push('Email address is too long (maximum 100 characters)');
+            }
+            
+            // If there are errors, show them prominently
+            if (errors.length > 0) {
+                // Show validation errors for individual fields
+                if (voterName && (voterName.length < 2 || !voterName.includes(' '))) {
+                    validateIndividualField('voterName');
+                }
+                if (voterEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(voterEmail)) {
+                    validateIndividualField('voterEmail');
+                }
+                
+                // Create a prominent error modal
+                const errorMessage = `❌ CANNOT PROCEED TO VOTING\n\nPlease fix these issues:\n\n${errors.map((error, index) => `${index + 1}. ${error}`).join('\n')}\n\nBoth fields are mandatory to participate in ABFC Awards voting.`;
+                
+                alert(errorMessage);
+                
+                // Focus on the first problematic field
+                if (!voterName || voterName.length < 2 || !voterName.includes(' ')) {
+                    document.getElementById('voterName').focus();
+                } else {
+                    document.getElementById('voterEmail').focus();
+                }
+                
+                // Show a toast notification
+                showToast('⚠️ Please complete all required fields with valid information', 'error');
                 return;
             }
-
-            // Save voter info
+            
+            // Additional check - make sure fields are actually filled
+            if (!voterName.trim() || !voterEmail.trim()) {
+                alert('❌ BOTH NAME AND EMAIL ARE REQUIRED\n\nYou cannot proceed to voting without providing complete information.');
+                return;
+            }
+            
+            // Final validation passed - proceed
             voterInfo.voterName = voterName;
-            voterInfo.voterEmail = document.getElementById('voterEmail').value.trim();
+            voterInfo.voterEmail = voterEmail;
             localStorage.setItem('abfc_voter_info', JSON.stringify(voterInfo));
 
+            // Success feedback
+            showToast('✅ Information validated! Proceeding to voting categories...', 'success');
+            
             // Show voting section
             currentSection = 'voting';
             document.getElementById('voterCard').classList.remove('show');
@@ -2102,12 +2281,38 @@
             nextBtn.disabled = true;
 
             try {
-                // Create vote record
+                // Enhanced duplicate prevention check
+                const deviceId = getDeviceId();
+                const voterName = voterInfo.voterName.toLowerCase().trim();
+                const voterEmail = voterInfo.voterEmail.toLowerCase().trim();
+                
+                // Check for existing votes with same device, name, or email
+                const existingVote = allVotes.find(vote => 
+                    vote.deviceId === deviceId || 
+                    vote.voterName.toLowerCase().trim() === voterName ||
+                    vote.voterEmail.toLowerCase().trim() === voterEmail
+                );
+                
+                if (existingVote) {
+                    const duplicateType = 
+                        existingVote.deviceId === deviceId ? 'device' :
+                        existingVote.voterName.toLowerCase().trim() === voterName ? 'name' : 'email';
+                    
+                    console.warn('🚫 Duplicate vote attempt detected:', {
+                        type: duplicateType,
+                        existing: existingVote,
+                        current: { deviceId, voterName, voterEmail }
+                    });
+                    
+                    throw new Error(`Duplicate vote detected: Same ${duplicateType} already voted`);
+                }
+
+                // Create vote record with enhanced tracking
                 const voteRecord = {
                     timestamp: new Date().toISOString(),
-                    deviceId: getDeviceId(),
+                    deviceId: deviceId,
                     voterName: voterInfo.voterName,
-                    voterEmail: voterInfo.voterEmail || '',
+                    voterEmail: voterInfo.voterEmail,
                     votes: {}
                 };
 
@@ -2134,7 +2339,12 @@
                 localStorage.setItem('abfc_all_votes', JSON.stringify(allVotes));
                 localStorage.setItem('abfc_has_voted', 'true');
                 
+                // Create a permanent device lock
+                localStorage.setItem('abfc_vote_lock', `${deviceId}_${Date.now()}`);
+                
                 hasVoted = true;
+                
+                console.log('✅ Vote submitted successfully:', voteRecord);
                 
                 // Show success screen after delay
                 setTimeout(() => {
@@ -2142,24 +2352,39 @@
                 }, 1500);
 
             } catch (error) {
-                console.error('Error submitting vote:', error);
-                showToast('❌ Error submitting to Google Sheets. Vote saved locally as backup.', 'error');
+                console.error('❌ Error submitting vote:', error);
                 
-                // Still save locally
-                const voteRecord = {
-                    timestamp: new Date().toISOString(),
-                    deviceId: getDeviceId(),
-                    voterName: voterInfo.voterName,
-                    voterEmail: voterInfo.voterEmail || '',
-                    votes: {...votes}
-                };
-                
-                allVotes.push(voteRecord);
-                localStorage.setItem('abfc_all_votes', JSON.stringify(allVotes));
-                localStorage.setItem('abfc_has_voted', 'true');
-                hasVoted = true;
-                
-                showSuccessSection();
+                if (error.message.includes('Duplicate vote detected')) {
+                    showToast('❌ ' + error.message + '. Contact admin if this is an error.', 'error');
+                    
+                    // Show the admin panel for resolving duplicates
+                    setTimeout(() => {
+                        const panel = document.getElementById('adminPanel');
+                        panel.classList.add('show');
+                        if (isAdminAuthenticated) {
+                            document.getElementById('adminLogin').style.display = 'none';
+                            document.getElementById('adminDashboard').style.display = 'block';
+                        }
+                    }, 2000);
+                } else {
+                    showToast('❌ Error submitting to Google Sheets. Vote saved locally as backup.', 'error');
+                    
+                    // Still save locally
+                    const voteRecord = {
+                        timestamp: new Date().toISOString(),
+                        deviceId: getDeviceId(),
+                        voterName: voterInfo.voterName,
+                        voterEmail: voterInfo.voterEmail,
+                        votes: {...votes}
+                    };
+                    
+                    allVotes.push(voteRecord);
+                    localStorage.setItem('abfc_all_votes', JSON.stringify(allVotes));
+                    localStorage.setItem('abfc_has_voted', 'true');
+                    hasVoted = true;
+                    
+                    showSuccessSection();
+                }
             } finally {
                 nextBtn.innerHTML = originalHTML;
                 nextBtn.disabled = false;
@@ -2200,20 +2425,209 @@
         function getDeviceId() {
             let deviceId = localStorage.getItem('abfc_device_id');
             if (!deviceId) {
-                deviceId = 'device_' + Math.random().toString(36).substr(2, 9);
+                // Create a more unique device ID using multiple factors
+                const timestamp = Date.now();
+                const random = Math.random().toString(36).substr(2, 9);
+                const userAgent = navigator.userAgent.replace(/\s+/g, '').substr(0, 20);
+                const screenRes = `${screen.width}x${screen.height}`;
+                
+                deviceId = `abfc_${timestamp}_${random}_${btoa(userAgent + screenRes).substr(0, 8)}`;
                 localStorage.setItem('abfc_device_id', deviceId);
+                
+                console.log('🔧 New device ID created:', deviceId);
             }
             return deviceId;
         }
 
-        // Admin Functions
+        // Admin Authentication Functions
         function toggleAdmin(event) {
             event.preventDefault();
             const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('show');
             
-            if (panel.classList.contains('show')) {
-                panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Check if admin is already authenticated
+            if (isAdminAuthenticated) {
+                // Show dashboard directly
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                panel.classList.add('show');
+                if (panel.classList.contains('show')) {
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                updateDuplicateStats();
+            } else {
+                // Show login screen
+                document.getElementById('adminLogin').style.display = 'block';
+                document.getElementById('adminDashboard').style.display = 'none';
+                panel.classList.toggle('show');
+                
+                if (panel.classList.contains('show')) {
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Focus on password field
+                    setTimeout(() => {
+                        document.getElementById('adminPasscode').focus();
+                    }, 300);
+                }
+            }
+        }
+
+        function verifyAdminAccess() {
+            const enteredCode = document.getElementById('adminPasscode').value;
+            const errorDiv = document.getElementById('adminLoginError');
+            
+            if (enteredCode === ADMIN_PASSCODE) {
+                // Correct passcode
+                isAdminAuthenticated = true;
+                localStorage.setItem('abfc_admin_session', 'true');
+                
+                // Hide login, show dashboard
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                
+                // Clear the password field
+                document.getElementById('adminPasscode').value = '';
+                errorDiv.style.display = 'none';
+                
+                showToast('✅ Admin access granted! Welcome to the dashboard.', 'success');
+                updateDuplicateStats();
+            } else {
+                // Wrong passcode
+                errorDiv.style.display = 'block';
+                document.getElementById('adminPasscode').value = '';
+                document.getElementById('adminPasscode').focus();
+                showToast('❌ Incorrect admin passcode. Access denied.', 'error');
+                
+                // Hide error after 5 seconds
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminAuthenticated = false;
+            localStorage.removeItem('abfc_admin_session');
+            
+            // Hide admin panel
+            document.getElementById('adminPanel').classList.remove('show');
+            
+            // Reset to login screen
+            document.getElementById('adminLogin').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('adminPasscode').value = '';
+            document.getElementById('adminLoginError').style.display = 'none';
+            
+            showToast('👋 Logged out of admin panel', 'success');
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('show');
+            document.getElementById('adminPasscode').value = '';
+            document.getElementById('adminLoginError').style.display = 'none';
+        }
+
+        // Duplicate Detection Functions
+        function updateDuplicateStats() {
+            const totalVotes = allVotes.length;
+            const duplicates = findDuplicateVotes();
+            
+            document.getElementById('totalVotesCount').textContent = totalVotes;
+            document.getElementById('duplicateCount').textContent = duplicates.length;
+        }
+
+        function findDuplicateVotes() {
+            const duplicates = [];
+            const seen = new Map();
+            
+            allVotes.forEach((vote, index) => {
+                // Check for duplicates based on multiple criteria
+                const deviceKey = vote.deviceId;
+                const nameKey = vote.voterName?.toLowerCase().trim();
+                const emailKey = vote.voterEmail?.toLowerCase().trim();
+                
+                // Find potential duplicates
+                if (seen.has(deviceKey) || 
+                    (nameKey && Array.from(seen.values()).some(v => v.name === nameKey)) ||
+                    (emailKey && Array.from(seen.values()).some(v => v.email === emailKey))) {
+                    
+                    duplicates.push({
+                        index: index,
+                        vote: vote,
+                        reason: seen.has(deviceKey) ? 'Same Device' : 
+                               nameKey && Array.from(seen.values()).some(v => v.name === nameKey) ? 'Same Name' : 'Same Email'
+                    });
+                }
+                
+                seen.set(deviceKey, {
+                    name: nameKey,
+                    email: emailKey,
+                    timestamp: vote.timestamp
+                });
+            });
+            
+            return duplicates;
+        }
+
+        function checkForDuplicates() {
+            const duplicates = findDuplicateVotes();
+            const resultsDiv = document.getElementById('duplicateResults');
+            
+            if (duplicates.length === 0) {
+                resultsDiv.innerHTML = '<div style="color: var(--success); font-weight: 600;">✅ No duplicates found! All votes are unique.</div>';
+                resultsDiv.style.display = 'block';
+                showToast('✅ No duplicate votes detected', 'success');
+                return;
+            }
+            
+            let resultsHTML = `<div style="color: var(--danger); font-weight: 600; margin-bottom: 1rem;">⚠️ Found ${duplicates.length} potential duplicate(s):</div>`;
+            
+            duplicates.forEach((dup, index) => {
+                resultsHTML += `
+                    <div style="margin-bottom: 0.5rem; padding: 0.5rem; background: #fef2f2; border-left: 3px solid var(--danger);">
+                        <strong>Duplicate #${index + 1}:</strong> ${dup.reason}<br>
+                        <small>Name: ${dup.vote.voterName} | Device: ${dup.vote.deviceId} | Time: ${new Date(dup.vote.timestamp).toLocaleString()}</small>
+                    </div>
+                `;
+            });
+            
+            resultsDiv.innerHTML = resultsHTML;
+            resultsDiv.style.display = 'block';
+            
+            showToast(`⚠️ Found ${duplicates.length} potential duplicates`, 'warning');
+        }
+
+        function removeDuplicates() {
+            const duplicates = findDuplicateVotes();
+            
+            if (duplicates.length === 0) {
+                showToast('✅ No duplicates to remove', 'success');
+                return;
+            }
+            
+            if (confirm(`⚠️ This will remove ${duplicates.length} duplicate vote(s).\n\nDuplicates are determined by:\n• Same device ID\n• Same name\n• Same email\n\nContinue with removal?`)) {
+                // Remove duplicates (keep the first occurrence, remove later ones)
+                const indicesToRemove = duplicates.map(d => d.index).sort((a, b) => b - a); // Sort descending to remove from end first
+                
+                indicesToRemove.forEach(index => {
+                    allVotes.splice(index, 1);
+                });
+                
+                // Save the cleaned data
+                localStorage.setItem('abfc_all_votes', JSON.stringify(allVotes));
+                
+                // Update stats
+                updateDuplicateStats();
+                
+                // Clear results display
+                document.getElementById('duplicateResults').innerHTML = '<div style="color: var(--success); font-weight: 600;">✅ Duplicates removed successfully!</div>';
+                
+                showToast(`✅ Removed ${indicesToRemove.length} duplicate votes`, 'success');
+                
+                // Suggest re-export
+                setTimeout(() => {
+                    if (confirm('💡 Duplicates have been cleaned from local storage.\n\nWould you like to export the cleaned CSV now?')) {
+                        exportData();
+                    }
+                }, 2000);
             }
         }
 
@@ -2252,6 +2666,7 @@
                 return;
             }
 
+            // Clean CSV export
             let csv = 'Timestamp,Device ID,Voter Name,Voter Email,';
             csv += categories.map(cat => cat.title).join(',') + '\n';
 
@@ -2274,7 +2689,7 @@
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
 
-            showToast('CSV file exported successfully!', 'success');
+            showToast('📊 CSV exported successfully!', 'success');
         }
 
         function viewAllResults() {
